@@ -15,11 +15,11 @@ if (!OperatingSystem.IsWindows())
 
 Dictionary<string, byte[]> LoginData = new();
 Settings Settings = new();
-var JsonOptions = new JsonSerializerOptions { WriteIndented = true};
+var JsonOptions = new JsonSerializerOptions { WriteIndented = true };
 
-if(!File.Exists("settings.json"))
+if (!File.Exists("settings.json"))
 {
-    File.WriteAllText("settings.json", JsonSerializer.Serialize(Settings, JsonOptions));
+    NewSettingFile();
     Console.WriteLine("Please edit the settings.json file and restart the program");
     return;
 }
@@ -36,8 +36,8 @@ if (GetLoginData(out byte[]? Current) && Current != null)
 };
 
 SaveData();
-        
-var login = GetLogin(LoginData.Keys.ToArray());
+
+var login = GetLogin(LoginData.Keys.ToArray(), foundLoginKey);
 
 if (login != "")
 {
@@ -45,9 +45,19 @@ if (login != "")
     LaunchApplication();
 }
 
+void NewSettingFile()
+{
+    Settings.ExeFile = "C:\\3DXChat\\3DXChat.exe";
+    Settings.Path = "C:\\3DXChat";
+    Settings.RegistryKey = "Software\\SexGameDevil\\3DXChat";
+    Settings.LoginValue = "loginData_h2649537910";
+
+    File.WriteAllText("settings.json", JsonSerializer.Serialize(Settings, JsonOptions));
+}
+
 void LaunchApplication()
 {
-    if(!File.Exists(Settings.ExeFile))
+    if (!File.Exists(Settings.ExeFile))
     {
         Console.WriteLine($"The application file does not exist ({Settings.ExeFile}). Please check the settings.json file and restart the program");
         Console.ReadKey();
@@ -75,28 +85,58 @@ bool FindLogin(out string key)
     return false;
 }
 
-string GetLogin(string[] LoginKeys)
+void PrepareScreen()
 {
-    for (int i = 0; i < LoginKeys.Length; i++)
-    {
-        Console.WriteLine($"{i + 1}:\t{LoginKeys[i]}");
-    }
-    Console.WriteLine("Enter the number of the login you want to use (q to quit)");
-    var key = Console.ReadKey();
+    Console.Clear();
+    Console.BackgroundColor = ConsoleColor.Black;
+    Console.ForegroundColor = ConsoleColor.Gray;
+    Console.Title = "3DXChat Login Selector";
+    Console.WriteLine("      3DXChat Login Selector");
+    Console.WriteLine("====================================");
+}
 
-    if (key.Key == ConsoleKey.Q)
+string GetLogin(string[] LoginKeys, string currentLoginKey)
+{
+    PrepareScreen();
+    Console.WriteLine("Select the login you want to use");
+    Console.WriteLine("====================================");
+    for (int i = 0; i < LoginKeys.Length && i < 10; i++)
     {
-        return "";
-    }
-
-    if (int.TryParse(key.KeyChar.ToString(), out int index))
-    {
-        if (index > 0 && index <= LoginKeys.Length)
+        if (LoginKeys[i] == currentLoginKey)
         {
-            return LoginKeys[index - 1];
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        Console.WriteLine($"{i + 1}:\t{LoginKeys[i]}");
+        Console.ForegroundColor = ConsoleColor.Gray;
+
+    }
+    Console.WriteLine("====================================");
+    Console.WriteLine("Enter the number of the login you want to use (q to quit / l to start without changing the login)");
+
+    while (true)
+    {
+        var key = Console.ReadKey(true);
+
+        switch (key.Key)
+        {
+            case ConsoleKey.Q:
+                return "";
+
+            case ConsoleKey.L:
+                LaunchApplication();
+                return "";
+
+            default:
+                if (int.TryParse(key.KeyChar.ToString(), out int index))
+                {
+                    if (index > 0 && index <= LoginKeys.Length)
+                    {
+                        return LoginKeys[index - 1];
+                    }
+                }
+                break;
         }
     }
-    return "";
 }
 
 
@@ -106,7 +146,7 @@ void LoadData()
     {
         LoginData = JsonSerializer.Deserialize<Dictionary<string, byte[]>>(File.ReadAllText("data.dat")) ?? new();
     }
-    if(File.Exists("settings.json"))
+    if (File.Exists("settings.json"))
     {
         Settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText("settings.json")) ?? new();
     }
@@ -119,14 +159,16 @@ void SaveData()
 
 bool StoreNewLogin(byte[] data)
 {
+    PrepareScreen();
     Console.WriteLine("New Login found. Do you want to store it? (y/n)");
-    var key = Console.ReadKey();
+    var key = Console.ReadKey(true);
     if (key.Key == ConsoleKey.Y)
     {
 
         Console.WriteLine("\n\rEnter a name for this login");
         string name = Console.ReadLine() ?? "Default";
         LoginData[name] = data;
+        foundLoginKey = name;
         return true;
     }
     return false;

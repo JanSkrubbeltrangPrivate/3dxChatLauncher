@@ -1,11 +1,6 @@
-﻿using System.Buffers.Text;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Microsoft.Win32;
-
 
 if (!OperatingSystem.IsWindows())
 {
@@ -24,7 +19,8 @@ if (!File.Exists("settings.json"))
     return;
 }
 
-LoadData();
+if (!LoadData())
+    return;
 
 string foundLoginKey = "";
 if (GetLoginData(out byte[]? Current) && Current != null)
@@ -35,14 +31,41 @@ if (GetLoginData(out byte[]? Current) && Current != null)
     }
 };
 
-SaveData();
+if (!SaveData())
+    return;
 
-var login = GetLogin(LoginData.Keys.ToArray(), foundLoginKey);
-
-if (login != "")
+if (LoginData.Count > 0)
 {
-    SetLoginData(LoginData[login]);
-    LaunchApplication();
+    var login = GetLogin(LoginData.Keys.ToArray(), foundLoginKey);
+    if (login != "")
+    {
+        SetLoginData(LoginData[login]);
+        LaunchApplication();
+    }
+}
+else
+{
+    NoLogin();
+}
+
+void NoLogin()
+{
+    Console.WriteLine("No logins found! (q to quit / l to launch the game)");
+
+    while (true)
+    {
+        var key = Console.ReadKey(true);
+
+        switch (key.Key)
+        {
+            case ConsoleKey.Q:
+                return;
+
+            case ConsoleKey.L:
+                LaunchApplication();
+                return;
+        }
+    }
 }
 
 void NewSettingFile()
@@ -60,7 +83,7 @@ void LaunchApplication()
     if (!File.Exists(Settings.ExeFile))
     {
         Console.WriteLine($"The application file does not exist ({Settings.ExeFile}). Please check the settings.json file and restart the program");
-        Console.ReadKey();
+        Console.ReadKey(true);
         return;
     }
     var psi = new ProcessStartInfo(Settings.ExeFile)
@@ -140,21 +163,47 @@ string GetLogin(string[] LoginKeys, string currentLoginKey)
 }
 
 
-void LoadData()
+bool LoadData()
 {
     if (File.Exists("data.dat"))
     {
-        LoginData = JsonSerializer.Deserialize<Dictionary<string, byte[]>>(File.ReadAllText("data.dat")) ?? new();
+        try
+        {
+            LoginData = JsonSerializer.Deserialize<Dictionary<string, byte[]>>(File.ReadAllText("data.dat")) ?? new();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error loading data.dat: {e.Message}");
+            return false;
+        }
     }
     if (File.Exists("settings.json"))
     {
-        Settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText("settings.json")) ?? new();
+        try
+        {
+            Settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText("settings.json")) ?? new();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error loading settings.json: {e.Message}");
+            return false;
+        }
     }
+    return true;
 }
 
-void SaveData()
+bool SaveData()
 {
-    File.WriteAllText("data.dat", JsonSerializer.Serialize(LoginData, JsonOptions));
+    try
+    {
+        File.WriteAllText("data.dat", JsonSerializer.Serialize(LoginData, JsonOptions));
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error saving data.dat: {e.Message}");
+        return false;
+    }
+    return true;
 }
 
 bool StoreNewLogin(byte[] data)

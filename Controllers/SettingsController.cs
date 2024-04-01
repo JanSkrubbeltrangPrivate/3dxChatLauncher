@@ -1,10 +1,11 @@
 using System.Text.Json;
+using Equinox.Chatlauncher.Interfaces;
 using Equinox.Chatlauncher.Models;
 using Microsoft.VisualBasic;
 
 namespace Equinox.Chatlauncher.Controllers
 {
-    public class SettingsController
+    public class SettingsController : ISettingController
     {
         private Settings settings = new();
         public Settings Settings

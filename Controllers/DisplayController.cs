@@ -1,8 +1,9 @@
+using Equinox.Chatlauncher.Interfaces;
 using Equinox.Chatlauncher.Models;
 
 namespace Equinox.Chatlauncher.Controllers
 {
-    public class DisplayController
+    public class DisplayController : IDisplayController
     {
         public bool NoLogin()
         {

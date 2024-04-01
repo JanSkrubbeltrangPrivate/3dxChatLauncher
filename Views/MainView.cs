@@ -1,4 +1,5 @@
 using Equinox.Chatlauncher.Controllers;
+using Equinox.Chatlauncher.Interfaces;
 
 namespace Equinox.Chatlauncher.Views
 {
@@ -12,10 +13,10 @@ namespace Equinox.Chatlauncher.Views
                 return;
             }
 
-            SettingsController SettingsController = new();
-            LoginController LoginController = new();
-            LaunchController LaunchController = new();
-            DisplayController DisplayController = new();
+            ISettingController SettingsController = new SettingsController();
+            ILoginController LoginController = new LoginController();
+            ILaunchController LaunchController = new LaunchController();
+            IDisplayController DisplayController = new DisplayController();
            
             if (!File.Exists("settings.json"))
             {
@@ -40,7 +41,7 @@ namespace Equinox.Chatlauncher.Views
                 }
             }
 
-            if (!LoginController.SaveLogin())
+            if (!LoginController.SaveLoginData())
                 return;
 
             if (LoginController.LoginData.Count > 0)

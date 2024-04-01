@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using Equinox.Chatlauncher.Interfaces;
+using Equinox.Chatlauncher.Models;
 
 namespace Equinox.Chatlauncher.Controllers
 {
-    public class LaunchController
+    public class LaunchController : ILaunchController
     {
-        public void LaunchApplication(Models.Settings Settings)
+        public void LaunchApplication(Settings Settings)
         {
             if (!File.Exists(Settings.ExeFile))
             {

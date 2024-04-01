@@ -1,10 +1,11 @@
 using System.Runtime.Versioning;
 using System.Text.Json;
+using Equinox.Chatlauncher.Interfaces;
 using Microsoft.Win32;
 
-namespace Equinox.Chatlauncher.Controllers
+namespace Equinox.Chatlauncher.Controllers 
 {
-    public class LoginController
+    public class LoginController: ILoginController
     {
         Dictionary<string, byte[]> loginData = new();
         public Dictionary<string, byte[]> LoginData
@@ -32,6 +33,20 @@ namespace Equinox.Chatlauncher.Controllers
             return true;
         }
         
+        public bool SaveLoginData()
+        {
+            try
+            {
+                File.WriteAllText("data.dat", JsonSerializer.Serialize(loginData, new JsonSerializerOptions { WriteIndented = true }));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error saving data.dat: {e.Message}");
+                return false;
+            }
+            return true;
+        }
+
         public bool FindLogin(out string key)
         {
             key = "";
@@ -49,20 +64,6 @@ namespace Equinox.Chatlauncher.Controllers
                 }
             }
             return false;
-        }
-
-        public bool SaveLogin()
-        {
-            try
-            {
-                File.WriteAllText("data.dat", JsonSerializer.Serialize(loginData, new JsonSerializerOptions { WriteIndented = true }));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error saving data.dat: {e.Message}");
-                return false;
-            }
-            return true;
         }
 
         [SupportedOSPlatform("windows")]

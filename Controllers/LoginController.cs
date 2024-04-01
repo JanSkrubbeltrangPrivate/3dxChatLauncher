@@ -1,6 +1,7 @@
 using System.Runtime.Versioning;
 using System.Text.Json;
 using Equinox.Chatlauncher.Interfaces;
+using Equinox.Chatlauncher.Models;
 using Microsoft.Win32;
 
 namespace Equinox.Chatlauncher.Controllers 
@@ -67,7 +68,7 @@ namespace Equinox.Chatlauncher.Controllers
         }
 
         [SupportedOSPlatform("windows")]
-        public bool GetLoginData(Models.Settings Settings, out byte[]? data)
+        public bool GetLoginData(Settings Settings, out byte[]? data)
         {
             using (var key = Registry.CurrentUser.OpenSubKey(Settings.RegistryKey, false))
             {
@@ -83,7 +84,7 @@ namespace Equinox.Chatlauncher.Controllers
         }
         
         [SupportedOSPlatform("windows")]
-        public void SetLoginData(Models.Settings Settings, byte[] data)
+        public void SetLoginData(Settings Settings, byte[] data)
         {
             using (var key = Registry.CurrentUser.OpenSubKey(Settings.RegistryKey, true))
             {

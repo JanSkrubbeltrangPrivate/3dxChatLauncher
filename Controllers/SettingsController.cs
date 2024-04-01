@@ -1,7 +1,6 @@
 using System.Text.Json;
 using Equinox.Chatlauncher.Interfaces;
 using Equinox.Chatlauncher.Models;
-using Microsoft.VisualBasic;
 
 namespace Equinox.Chatlauncher.Controllers
 {

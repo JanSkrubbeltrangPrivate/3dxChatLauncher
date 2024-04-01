@@ -7,12 +7,6 @@ namespace Equinox.Chatlauncher.Views
     {
         public void Run()
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                Console.WriteLine("This program only works on Windows");
-                return;
-            }
-
             ISettingController SettingsController = new SettingsController();
             ILoginController LoginController = new LoginController();
             ILaunchController LaunchController = new LaunchController();

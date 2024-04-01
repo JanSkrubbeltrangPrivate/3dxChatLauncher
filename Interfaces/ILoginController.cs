@@ -1,3 +1,5 @@
+using Equinox.Chatlauncher.Models;
+
 namespace Equinox.Chatlauncher.Interfaces
 {
     public interface ILoginController
@@ -7,7 +9,7 @@ namespace Equinox.Chatlauncher.Interfaces
         bool LoadLoginData();
         bool SaveLoginData();
         bool FindLogin(out string foundLoginKey);
-        bool GetLoginData(Models.Settings settings, out byte[]? Current);
-        void SetLoginData(Models.Settings settings, byte[] data);
+        bool GetLoginData(Settings settings, out byte[]? Current);
+        void SetLoginData(Settings settings, byte[] data);
     }
 }

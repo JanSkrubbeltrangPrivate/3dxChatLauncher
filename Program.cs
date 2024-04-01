@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
-using Equinox.Chatlauncher.Controllers;
-using Equinox.Chatlauncher.Views;
-using Microsoft.Win32;
-
+﻿using Equinox.Chatlauncher.Views;
 
 namespace Equinox.Chatlauncher
 {
@@ -11,6 +6,12 @@ namespace Equinox.Chatlauncher
     {
         static void Main(string[] args)
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                Console.WriteLine("This program only works on Windows");
+                return;
+            }
+
             MainView MainView = new();
             MainView.Run();
         }

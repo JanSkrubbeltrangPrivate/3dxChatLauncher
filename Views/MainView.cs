@@ -1,4 +1,5 @@
 using Equinox.Chatlauncher.Controllers;
+using Equinox.Chatlauncher.Enums;
 using Equinox.Chatlauncher.Interfaces;
 
 namespace Equinox.Chatlauncher.Views
@@ -22,15 +23,15 @@ namespace Equinox.Chatlauncher.Views
             if (!SettingsController.LoadSettingFile() || !LoginController.LoadLoginData())
                 return;
 
-            string foundLoginKey = "";
+            string FoundLoginKey = "";
             
-            if(LoginController.GetLoginData(SettingsController.Settings, out byte[]? Current) && Current != null)
+            if(LoginController.GetLoginData(SettingsController.Settings, out byte[]? CurrentData) && CurrentData != null)
             {
-                if (!LoginController.FindLogin(out foundLoginKey))
+                if (!LoginController.FindLogin(out FoundLoginKey))
                 {
                     if(DisplayController.StoreNewLogin(out string NewName))
                     {
-                        LoginController.LoginData[NewName] = Current;
+                        LoginController.LoginData[NewName] = CurrentData;
                     }
                 }
             }
@@ -40,33 +41,24 @@ namespace Equinox.Chatlauncher.Views
 
             if (LoginController.LoginData.Count > 0)
             {
-                var login = DisplayController.SelectLogin(LoginController.LoginData.Keys.ToArray(), foundLoginKey);
-                switch (login)
+                switch(DisplayController.SelectLogin(LoginController.LoginData.Keys.ToArray(), FoundLoginKey, out string Login))
                 {
-                    case "":
-                        return;
-                    case "$$Equinox.LaunchAPP.NOW££":
+                    case SelectLoginChoice.Quit:
+                        break;
+                    case SelectLoginChoice.Launch:
                         LaunchController.LaunchApplication(SettingsController.Settings);
                         break;
-                    default:
-                        LoginController.SetLoginData(SettingsController.Settings, LoginController.LoginData[login]);
+                    case SelectLoginChoice.Found:
+                        LoginController.SetLoginData(SettingsController.Settings, LoginController.LoginData[Login]);
                         LaunchController.LaunchApplication(SettingsController.Settings);
                         break;
-                }
-                
-                
-                if (login != "")
-                {
-                    LoginController.SetLoginData(SettingsController.Settings, LoginController.LoginData[login]);
                 }
             }
             else
             {
-                if(DisplayController.NoLogin())
+                if(DisplayController.LauncApplicationOnNoLoginFound())
                     LaunchController.LaunchApplication(SettingsController.Settings);
             }
-
         }
     }
-
 }

@@ -1,11 +1,11 @@
+using Equinox.Chatlauncher.Enums;
 using Equinox.Chatlauncher.Interfaces;
-using Equinox.Chatlauncher.Models;
 
 namespace Equinox.Chatlauncher.Controllers
 {
     public class DisplayController : IDisplayController
     {
-        public bool NoLogin()
+        public bool LauncApplicationOnNoLoginFound()
         {
             Console.WriteLine("No logins found! (q to quit / l to launch the game)");
 
@@ -24,7 +24,7 @@ namespace Equinox.Chatlauncher.Controllers
             }
         }
 
-        public string SelectLogin(string[] LoginKeys, string currentLoginKey)
+        public SelectLoginChoice SelectLogin(string[] LoginKeys, string currentLoginKey, out string Login)
         {
             PrepareScreen();
             Console.WriteLine("Select the login you want to use");
@@ -49,17 +49,20 @@ namespace Equinox.Chatlauncher.Controllers
                 switch (key.Key)
                 {
                     case ConsoleKey.Q:
-                        return "";
+                        Login = "";
+                        return SelectLoginChoice.Quit;
 
                     case ConsoleKey.L:
-                        return "$$Equinox.LaunchAPP.NOW££";
+                        Login = "";
+                        return SelectLoginChoice.Launch;
 
                     default:
                         if (int.TryParse(key.KeyChar.ToString(), out int index))
                         {
                             if (index > 0 && index <= LoginKeys.Length)
                             {
-                                return LoginKeys[index - 1];
+                                Login = LoginKeys[index - 1];
+                                return SelectLoginChoice.Found;
                             }
                         }
                         break;

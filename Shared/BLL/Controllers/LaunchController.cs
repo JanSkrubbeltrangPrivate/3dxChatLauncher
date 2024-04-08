@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using Equinox.Chatlauncher.Interfaces;
-using Equinox.Chatlauncher.Models;
+using BLL.Interfaces;
+using BLL.Models;
 
-namespace Equinox.Chatlauncher.Controllers
+namespace BLL.Controllers
 {
     public class LaunchController : ILaunchController
     {

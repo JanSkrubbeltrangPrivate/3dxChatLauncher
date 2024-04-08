@@ -1,10 +1,10 @@
 using System.Runtime.Versioning;
 using System.Text.Json;
-using Equinox.Chatlauncher.Interfaces;
-using Equinox.Chatlauncher.Models;
+using BLL.Interfaces;
+using BLL.Models;
 using Microsoft.Win32;
 
-namespace Equinox.Chatlauncher.Controllers 
+namespace BLL.Controllers 
 {
     public class LoginController: ILoginController
     {

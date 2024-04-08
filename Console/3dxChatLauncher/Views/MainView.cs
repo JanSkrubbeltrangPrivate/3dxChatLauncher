@@ -1,12 +1,12 @@
-using Equinox.Chatlauncher.Controllers;
-using Equinox.Chatlauncher.Enums;
-using Equinox.Chatlauncher.Interfaces;
+using BLL.Controllers;
+using BLL.Enums;
+using BLL.Interfaces;
 
-namespace Equinox.Chatlauncher.Views
+namespace _3dxChatLauncher.Views
 {
     public class MainView
     {
-        public void Run()
+        public void MainMenu()
         {
             ISettingController SettingsController = new SettingsController();
             ILoginController LoginController = new LoginController();

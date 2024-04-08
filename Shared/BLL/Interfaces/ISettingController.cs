@@ -1,6 +1,6 @@
-using Equinox.Chatlauncher.Models;
+using BLL.Models;
 
-namespace Equinox.Chatlauncher.Interfaces
+namespace BLL.Interfaces
 {
     public interface ISettingController
     {

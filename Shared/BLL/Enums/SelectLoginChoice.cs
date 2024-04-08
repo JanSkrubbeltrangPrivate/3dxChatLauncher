@@ -1,4 +1,4 @@
-namespace Equinox.Chatlauncher.Enums
+namespace BLL.Enums
 {
     public enum SelectLoginChoice
     {

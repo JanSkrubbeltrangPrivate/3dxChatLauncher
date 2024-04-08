@@ -1,4 +1,4 @@
-namespace Equinox.Chatlauncher.Models
+namespace BLL.Models
 {
     public class Settings
     {

@@ -1,7 +1,7 @@
-using Equinox.Chatlauncher.Enums;
-using Equinox.Chatlauncher.Interfaces;
+using BLL.Enums;
+using BLL.Interfaces;
 
-namespace Equinox.Chatlauncher.Controllers
+namespace BLL.Controllers
 {
     public class DisplayController : IDisplayController
     {

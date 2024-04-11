@@ -9,7 +9,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="5"/>
@@ -25,7 +25,7 @@
         </Grid.RowDefinitions>
         
         <TextBox x:Name="NewName" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="4" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" />
-        <Label Grid.Row="1" Grid.Column="1" Content="New name:" HorizontalAlignment="Left" VerticalAlignment="Center" Width="90"/>
+        <Label Grid.Row="1" Grid.Column="1" Content="New name:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Button Grid.Row="3" Grid.Column="3" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40" IsDefault="True" Click="Ok_Click" RenderTransformOrigin="1.325,0.278"/>
         <Button Grid.Row="3" Grid.Column="5" Content="Cancel" HorizontalAlignment="Left"  VerticalAlignment="Center" IsCancel="True"/>
     </Grid>

@@ -15,7 +15,6 @@ namespace BLL.Controllers
         
         public void NewSettingFile()
         {
-            Models.Settings Settings = new();
             Settings.ExeFile = "C:\\3DXChat\\3DXChat.exe";
             Settings.Path = "C:\\3DXChat";
             Settings.RegistryKey = "Software\\SexGameDevil\\3DXChat";
